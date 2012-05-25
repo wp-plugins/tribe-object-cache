@@ -1,9 +1,9 @@
-=== Tribe Oject Cache ===
+=== Tribe Object Cache ===
 Contributors: ModernTribe, peterchester, markjaquith, ryan, sivel, ruslany, pierreschmitz
 Tags: APC, object cache, backend, cache, performance, speed, batcache, memcached, WinCache, xcache
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 == Description ==
 
@@ -49,6 +49,11 @@ For more information on any of the supported cache types, please read up on the 
 * http://wordpress.org/extend/plugins/wincache-object-cache-backend/
 
 == Changelog ==
+
+= 1.0.1
+
+* Fix retarded typo
+* Make all caches externals in svn repo
 
 = 1.0 =
 
