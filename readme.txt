@@ -3,7 +3,7 @@ Contributors: ModernTribe, peterchester, markjaquith, ryan, sivel, ruslany, pier
 Tags: APC, object cache, backend, cache, performance, speed, batcache, memcached, WinCache, xcache
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 == Description ==
 
@@ -50,7 +50,11 @@ For more information on any of the supported cache types, please read up on the 
 
 == Changelog ==
 
-= 1.0.1
+= 1.0.2 =
+
+* Dang! Apparently SVN externals don't work on the plugin repo. Reverted externals.
+
+= 1.0.1 =
 
 * Fix retarded typo
 * Make all caches externals in svn repo
