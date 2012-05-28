@@ -3,7 +3,7 @@ Contributors: ModernTribe, peterchester, markjaquith, ryan, sivel, ruslany, pier
 Tags: APC, object cache, backend, cache, performance, speed, batcache, memcached, WinCache, xcache
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 == Description ==
 
@@ -49,6 +49,10 @@ For more information on any of the supported cache types, please read up on the 
 * http://wordpress.org/extend/plugins/wincache-object-cache-backend/
 
 == Changelog ==
+
+= 1.0.3 =
+
+* Add handler for xcache versions below 1.3 where xcache_unset_by_prefix() is not defined (Such as when I run this on Dreamhost).
 
 = 1.0.2 =
 

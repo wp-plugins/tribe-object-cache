@@ -20,6 +20,15 @@ elseif ( function_exists( 'apc_add' ) ) {
 
 // Use XCACHE
 elseif ( function_exists( 'xcache_get' ) ) {
+
+	// xcache 1.2 backwards compatibility
+	if ( !function_exists( 'xcache_unset_by_prefix' ) ) {
+		function xcache_unset_by_prefix( $prefix ) {
+			// Since we can't clear targetted cache, we'll clear all. :(
+			xcache_clear_cache(XC_TYPE_VAR, 0);
+		}
+	}
+
 	require_once( $tribe_object_cache_base_path . '/xcache/object-cache.php' );
 }
 
