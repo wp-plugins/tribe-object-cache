@@ -1,10 +1,12 @@
 <?php
 
 /**
+ * Plugin Name: XCache Object Cache Backend
  * Description: XCache backend for the WordPress Object Cache.
- * Version: 1.0
+ * Version: 1.0.3
  * Author: Pierre Schmitz
  * Author URI: https://pierre-schmitz.com/
+ * Plugin URI: http://wordpress.org/extend/plugins/xcache/
  */
 
 function wp_cache_add($key, $data, $group = '', $expire = 0) {
@@ -35,10 +37,10 @@ function wp_cache_flush() {
 	return $wp_object_cache->flush();
 }
 
-function wp_cache_get( $key, $group = '', $force = false ) {
+function wp_cache_get( $key, $group = '', $force = false, &$found = null ) {
 	global $wp_object_cache;
 
-	return $wp_object_cache->get( $key, $group, $force );
+	return $wp_object_cache->get( $key, $group, $force, $found );
 }
 
 function wp_cache_incr( $key, $offset = 1, $group = '' ) {
@@ -108,7 +110,7 @@ class XCache_Object_Cache {
 	}
 
 	public function add( $key, $data, $group = 'default', $expire = '' ) {
-		if (wp_suspend_cache_addition()) {
+		if (function_exists('wp_suspend_cache_addition') && wp_suspend_cache_addition()) {
 			return false;
 		}
 		if (isset($this->local_cache[$group][$key])) {
@@ -174,26 +176,37 @@ class XCache_Object_Cache {
 
 	public function flush() {
 		$this->local_cache = array ();
-		return xcache_unset_by_prefix($this->prefix);
+		// xcache_unset_by_prefix is only available since XCache 1.3
+		if (!function_exists('xcache_unset_by_prefix')) {
+			return xcache_unset_by_prefix($this->prefix);
+		} else {
+			xcache_clear_cache(XC_TYPE_VAR, 0);
+			return true;
+		}
 	}
 
-	public function get( $key, $group = 'default', $force = false) {
+	public function get( $key, $group = 'default', $force = false, &$found = null) {
 		if (isset($this->local_cache[$group][$key])) {
+			$found = true;
 			if (is_object($this->local_cache[$group][$key])) {
 				return clone $this->local_cache[$group][$key];
 			} else {
 				return $this->local_cache[$group][$key];
 			}
 		} elseif (isset($this->non_persistent_groups[$group])) {
+			$found = false;
 			return false;
 		} else {
 			$value = unserialize(xcache_get($this->get_key($group, $key)));
 			if ($value !== false) {
+				$found = true;
 				if (is_object($value)) {
 					$this->local_cache[$group][$key] = clone $value;
 				} else {
 					$this->local_cache[$group][$key] = $value;
 				}
+			} else {
+				$found = false;
 			}
 			return $value;
 		}
@@ -234,8 +247,7 @@ class XCache_Object_Cache {
 	}
 
 	public function reset() {
-		// TODO: only remove non-global groups
-		$this->flush();
+		// TODO: remove non-global groups
 	}
 
 	public function set($key, $data, $group = 'default', $expire = '') {

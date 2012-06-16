@@ -3,7 +3,7 @@
 Plugin Name:	Tribe Object Cache
 Description:	Simple plugin that supports Memcached, APC, Xcache or WinCache based on your system. All you have to do is activate it.
 Author:			Peter Chester, Modern Tribe, Inc.
-Version:		1.0.3
+Version:		1.0.4
 Author URI:		http://tri.be
 */
 
